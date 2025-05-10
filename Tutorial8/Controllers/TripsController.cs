@@ -67,7 +67,7 @@ namespace Tutorial8.Controllers
         /// <summary>
         /// Endpoint creates a new record for registering a particular trip for a specific client.
         /// </summary>
-        [HttpPut("")]
+        [HttpPut("/api/clients/{id}/trips/{tripId}")]
         public async Task<IActionResult> RegisterClientForTrip(int id, int tripId)
         {
             
