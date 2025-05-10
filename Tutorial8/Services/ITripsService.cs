@@ -4,15 +4,15 @@ namespace Tutorial8.Services;
 
 public interface ITripsService
 {
-    Task<List<TripDTO>> GetTrips();
-    Task<bool> ClientHasTrips(int id);
-    Task< List<TripByClientDTO> > GetTripByClient(int id);
+    Task<List<TripDTO>> GetTripsAsync();
+    Task<bool> ClientHasTripsAsync(int id);
+    Task< List<TripByClientDTO> > GetTripByClientAsync(int id);
     
-    Task<int?> CreateClient(ClientDTO clientDto);
+    Task<int?> CreateClientAsync(ClientDTO clientDto);
 
-    Task<bool> ClientExists(int IdClient);
+    Task<bool> ClientExistsAsync(int IdClient);
     
-    Task<(bool succeed, string message)> RegisterClientForTrip(int clientId, int tripId);
-    Task<(bool succeed, string message)> UnregisterClientForTrip(int clientId, int tripId);
+    Task<(bool succeed, string message)> RegisterClientForTripAsync(int clientId, int tripId);
+    Task<(bool succeed, string message)> UnregisterClientForTripAsync(int clientId, int tripId);
     
 }

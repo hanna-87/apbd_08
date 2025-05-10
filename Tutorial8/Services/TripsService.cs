@@ -13,7 +13,7 @@ public class TripsService : ITripsService
     {
         _connectionString = connectionString;
     }
-    public async Task<List<TripDTO>> GetTrips()
+    public async Task<List<TripDTO>> GetTripsAsync()
     {
         var trips = new Dictionary<int, TripDTO>();
         
@@ -68,7 +68,7 @@ LEFT JOIN Country c ON ct.IdCountry = c.IdCountry
     }
 
 
-    public async Task<bool> ClientHasTrips(int idClient)
+    public async Task<bool> ClientHasTripsAsync(int idClient)
     {
         // Selects the IDs of trips that a specific client is registered for.
         string command = @" SELECT t.IdTrip FROM Trip t
@@ -86,7 +86,7 @@ LEFT JOIN Country c ON ct.IdCountry = c.IdCountry
         }
     }
     
-    public async Task<bool> ClientExists(int IdClient)
+    public async Task<bool> ClientExistsAsync(int IdClient)
     {
         using (SqlConnection conn = new SqlConnection(_connectionString))
         {
@@ -105,7 +105,7 @@ LEFT JOIN Country c ON ct.IdCountry = c.IdCountry
       
     }
     
-    public async Task<bool> TripExists(int IdTrip)
+    public async Task<bool> TripExistsAsync(int IdTrip)
     {
         using (SqlConnection conn = new SqlConnection(_connectionString))
         {
@@ -128,7 +128,7 @@ LEFT JOIN Country c ON ct.IdCountry = c.IdCountry
     
     
     
-    public async Task<List<TripByClientDTO>> GetTripByClient(int idClient)
+    public async Task<List<TripByClientDTO>> GetTripByClientAsync(int idClient)
     {
         var trips = new List<TripByClientDTO>();
 // Selects trip details and registration info for a specific client.
@@ -176,7 +176,7 @@ LEFT JOIN Country c ON ct.IdCountry = c.IdCountry
         return trips; 
     }
 
-    public async Task<int?> CreateClient(ClientDTO clientDto)
+    public async Task<int?> CreateClientAsync(ClientDTO clientDto)
     {
         // Inserts a new client into the Client table and returns the generated IdClient.
         string command = @"INSERT INTO Client ( FirstName, LastName, Email, Telephone, Pesel)
@@ -199,18 +199,18 @@ VALUES ( @FirstName, @LastName, @Email, @Telephone, @Pesel)";
         }
     }
 
-    public async Task<(bool succeed, string message)> RegisterClientForTrip(int IdClient, int IdTrip)
+    public async Task<(bool succeed, string message)> RegisterClientForTripAsync(int IdClient, int IdTrip)
     {
         using (SqlConnection conn = new SqlConnection(_connectionString))
         { 
             await conn.OpenAsync();
             
-            if (!await TripExists(IdTrip))
+            if (!await TripExistsAsync(IdTrip))
             {
                 return (false, $"Trip {IdTrip} does not exist");
             }
            
-            if (!await ClientExists(IdClient))
+            if (!await ClientExistsAsync(IdClient))
             {
                 return (false, $"Client {IdClient} does not exist");
             }
@@ -247,10 +247,10 @@ VALUES ( @FirstName, @LastName, @Email, @Telephone, @Pesel)";
 
     }
 
-    public async Task<(bool succeed, string message)> UnregisterClientForTrip(int clientId, int tripId)
+    public async Task<(bool succeed, string message)> UnregisterClientForTripAsync(int clientId, int tripId)
     {
-        if (!await TripExists(tripId)) return (false, $"Trip {tripId} does not exist");
-        if(!await ClientExists(clientId)) return (false, $"Client {clientId} does not exist");
+        if (!await TripExistsAsync(tripId)) return (false, $"Trip {tripId} does not exist");
+        if(!await ClientExistsAsync(clientId)) return (false, $"Client {clientId} does not exist");
       
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {

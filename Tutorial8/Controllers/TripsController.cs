@@ -24,7 +24,7 @@ namespace Tutorial8.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTrips()
         {
-            var trips = await _tripsService.GetTrips();
+            var trips = await _tripsService.GetTripsAsync();
             return Ok(trips);
         }
         
@@ -38,12 +38,12 @@ namespace Tutorial8.Controllers
             if (id <= 0)
                 return BadRequest("Client ID must be a positive integer.");
             
-            if (!await _tripsService.ClientExists(id)) return NotFound("Client not found.");
+            if (!await _tripsService.ClientExistsAsync(id)) return NotFound("Client not found.");
             
-            if( !await _tripsService.ClientHasTrips(id)){
+            if( !await _tripsService.ClientHasTripsAsync(id)){
              return NotFound("Client does not have trips.");
             }
-            var trips = await _tripsService.GetTripByClient(id);
+            var trips = await _tripsService.GetTripByClientAsync(id);
             return Ok(trips);
             
         }
@@ -57,7 +57,7 @@ namespace Tutorial8.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdId = await _tripsService.CreateClient(clientDto);
+            var createdId = await _tripsService.CreateClientAsync(clientDto);
             if (createdId == null)
                 return StatusCode(500, "Could not create client.");
 
@@ -73,7 +73,7 @@ namespace Tutorial8.Controllers
             
             if (id <= 0 || tripId <= 0)
                 return BadRequest("Client ID and Trip ID must be positive integers.");
-            var result = await _tripsService.RegisterClientForTrip(id, tripId);
+            var result = await _tripsService.RegisterClientForTripAsync(id, tripId);
             if (!result.succeed)
             {
                 if (result.message.Contains("does not exist"))
@@ -94,7 +94,7 @@ namespace Tutorial8.Controllers
             
             if (id <= 0 || tripId <= 0)
                 return BadRequest("Client ID and Trip ID must be positive integers.");
-            var result = await _tripsService.UnregisterClientForTrip(id, tripId);
+            var result = await _tripsService.UnregisterClientForTripAsync(id, tripId);
             if (!result.succeed)
             {
                 if (result.message.Contains("does not exist") || result.message.Contains("no Trip"))
